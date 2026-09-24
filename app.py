@@ -17,6 +17,9 @@ app = typer.Typer()
 
 @app.command()
 def ventas_cal():
+    """
+    Crea las tablas en formato .csv de ventas, sucursales y montos
+    """
     try:
 
         df = pd.read_excel('ventas_mod/Ventas_Rango_de_fechas.xls')
@@ -82,6 +85,9 @@ def ventas_cal():
 
 @app.command()
 def merge():
+    """
+    Unir las tablas ventas con stock >> resultado/resultado.csv
+    """
 
     # script para generar el archivo resultado.csv a partir de los archivos ventas.csv y test_stock.txt
     # este debe ser nombre de las columnas del archivo stock.txt debe ser el mismo que el de las columnas del archivo ventas.csv, 
@@ -273,7 +279,9 @@ def merge():
 
 @app.command()
 def automatic():
-
+    """
+    Copia los valores de ventas/stock al formato para el informe en base_0.xlsx
+    """
 
     ARCHIVO_EXCEL = "base/base_0.xlsx"
     HOJA = "base_0"
