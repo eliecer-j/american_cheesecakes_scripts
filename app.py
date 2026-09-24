@@ -380,7 +380,7 @@ def automatic():
         ##___________________________________________________
         from datetime import datetime
         ahora = datetime.now()
-        file = f"base/base_0_{ahora.strftime("%Y-%m-%d-%H-%M-%S")}_modificado.xlsx"
+        file = f"base/informes/base_0_{ahora.strftime("%Y-%m-%d-%H-%M-%S")}_modificado.xlsx"
         wb.save(file)
         
         print('\n ARCHIVO BASE GUARDADO ==>', file)
