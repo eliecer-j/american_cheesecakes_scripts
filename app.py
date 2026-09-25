@@ -16,9 +16,9 @@ app = typer.Typer()
 
 
 @app.command()
-def ventas_cal():
+def ventas():
     """
-    Crea las tablas en formato .csv de ventas, sucursales y montos
+    1 ==> Crea las tablas en formato .csv de ventas, sucursales y montos
     """
     try:
 
@@ -86,7 +86,7 @@ def ventas_cal():
 @app.command()
 def merge():
     """
-    Unir las tablas ventas con stock >> resultado/resultado.csv
+    2 ==> Unir las tablas ventas con stock >> resultado/resultado.csv
     """
 
     # script para generar el archivo resultado.csv a partir de los archivos ventas.csv y test_stock.txt
@@ -278,9 +278,9 @@ def merge():
         print(f"Error: {e} 🤮")
 
 @app.command()
-def automatic():
+def auto():
     """
-    Copia los valores de ventas/stock al formato para el informe en base_0.xlsx
+    3 ==> Copia los valores de ventas/stock al formato para el informe en base_0.xlsx
     """
 
     ARCHIVO_EXCEL = "base/base_0.xlsx"
