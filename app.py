@@ -302,10 +302,7 @@ def auto():
         productos_json = json.load(archivo)
 
     
-    lista_nombres_json = [x for x in productos_json.keys()]
-    lista_nombres_resultado = []
-    
-
+    #lista_nombres_json = [x for x in productos_json.keys()] 
 
   
 
@@ -388,11 +385,25 @@ def auto():
         print(e)
 
     ####### mostrar faltantes
+    lista_nombres_resultado = []
+    lista_nombres_excel = []
     for _ , result in resultado.iterrows():
                 lista_nombres_resultado.append(result['nombre'])
 
+    for fila in range(3, ws.max_row + 1):
+        nombre_excel = ws.cell(fila, 2).value
+        nombre_excel = str(nombre_excel).strip()
+        lista_nombres_excel.append(nombre_excel)
 
-    print('\n nombres del excel que no estan en el file resultado.csv')
+    for i in ['AMERICAN CUPS', 'None', 'VENTAS DIARIAS POR PRODUCTO DEL 18,19,20 DE SEPTIEMBRE DEL 2026', 'TORTAS', 
+                            'PRODUCTOS DE SAL', 'GALLETERIA', 'BEBIDAS FRIAS', 'VENTAS DE SEPTIEMBRE 18,19,20 DEL 2026',
+                              'P BROWNIES', 'PRODUCTO', 'MED 10PX', 'TOTAL CAFÉ POR ALMACEN', 'PROMOCION']:
+        lista_nombres_excel.remove(i)
+    
+    
+
+
+    print('\nnombres del excel que no estan en el file resultado.csv')
     for fila in range(3, ws.max_row + 1):
         nombre_excel = ws.cell(fila, 2).value
         nombre_excel = str(nombre_excel).strip()
@@ -402,6 +413,11 @@ def auto():
             continue
         if nombre_excel not in lista_nombres_resultado:
             print(nombre_excel)
+
+    print('\nnombres del resultado.csv que no estan en el excel base_0')
+    for _, result in resultado.iterrows():
+       if result['nombre'] not in lista_nombres_excel:
+           print(result['nombre'])
             
 
 if __name__ == "__main__":
