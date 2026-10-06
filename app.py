@@ -398,7 +398,8 @@ def auto():
     for i in ['AMERICAN CUPS', 'None', 'VENTAS DIARIAS POR PRODUCTO DEL 18,19,20 DE SEPTIEMBRE DEL 2026', 'TORTAS', 
                             'PRODUCTOS DE SAL', 'GALLETERIA', 'BEBIDAS FRIAS', 'VENTAS DE SEPTIEMBRE 18,19,20 DEL 2026',
                               'P BROWNIES', 'PRODUCTO', 'MED 10PX', 'TOTAL CAFÉ POR ALMACEN', 'PROMOCION']:
-        lista_nombres_excel.remove(i)
+        if i in lista_nombres_excel:
+            lista_nombres_excel.remove(i)
     
     
 
