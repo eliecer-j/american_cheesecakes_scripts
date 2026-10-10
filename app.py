@@ -7,6 +7,7 @@
 import pandas as pd
 import xlrd
 import typer, json
+import sys
 from openpyxl import load_workbook
 
 
@@ -283,6 +284,11 @@ def auto():
     3 ==> Copia los valores de ventas/stock al formato para el informe en base_0.xlsx
     """
 
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
     ARCHIVO_EXCEL = "base/base_0.xlsx"
     HOJA = "base_0"
     FILE_CSV = "resultado/resultado.csv"
@@ -385,40 +391,32 @@ def auto():
         print(e)
 
     ####### mostrar faltantes
+    encabezados = ['AMERICAN CUPS', 'None', 'VENTAS DIARIAS POR PRODUCTO DEL 18,19,20 DE SEPTIEMBRE DEL 2026', 'TORTAS', 'PRODUCTOS DE SAL', 'GALLETERIA', 'BEBIDAS FRIAS', 'VENTAS DE SEPTIEMBRE 18,19,20 DEL 2026', 'P BROWNIES', 'PRODUCTO', 'MED 10PX', 'TOTAL CAFÉ POR ALMACEN', 'PROMOCION']
+
     lista_nombres_resultado = []
     lista_nombres_excel = []
     for _ , result in resultado.iterrows():
-                lista_nombres_resultado.append(result['nombre'])
+        lista_nombres_resultado.append(result['nombre'])
 
     for fila in range(3, ws.max_row + 1):
         nombre_excel = ws.cell(fila, 2).value
         nombre_excel = str(nombre_excel).strip()
+        if nombre_excel in encabezados:
+            continue
         lista_nombres_excel.append(nombre_excel)
 
-    for i in ['AMERICAN CUPS', 'None', 'VENTAS DIARIAS POR PRODUCTO DEL 18,19,20 DE SEPTIEMBRE DEL 2026', 'TORTAS', 
-                            'PRODUCTOS DE SAL', 'GALLETERIA', 'BEBIDAS FRIAS', 'VENTAS DE SEPTIEMBRE 18,19,20 DEL 2026',
-                              'P BROWNIES', 'PRODUCTO', 'MED 10PX', 'TOTAL CAFÉ POR ALMACEN', 'PROMOCION']:
-        if i in lista_nombres_excel:
-            lista_nombres_excel.remove(i)
-    
-    
+    excel_sin_datos = [n for n in lista_nombres_excel if n not in lista_nombres_resultado]
+    sobrantes = [n for n in lista_nombres_resultado if n not in lista_nombres_excel]
+    con_datos = len(lista_nombres_excel) - len(excel_sin_datos)
 
-
-    print('\nnombres del excel que no estan en el file resultado.csv')
-    for fila in range(3, ws.max_row + 1):
-        nombre_excel = ws.cell(fila, 2).value
-        nombre_excel = str(nombre_excel).strip()
-        if nombre_excel in ['AMERICAN CUPS', 'None', 'VENTAS DIARIAS POR PRODUCTO DEL 18,19,20 DE SEPTIEMBRE DEL 2026', 'TORTAS', 
-                            'PRODUCTOS DE SAL', 'GALLETERIA', 'BEBIDAS FRIAS', 'VENTAS DE SEPTIEMBRE 18,19,20 DEL 2026',
-                              'P BROWNIES', 'PRODUCTO', 'MED 10PX', 'TOTAL CAFÉ POR ALMACEN', 'PROMOCION']:
-            continue
-        if nombre_excel not in lista_nombres_resultado:
-            print(nombre_excel)
-
-    print('\nnombres del resultado.csv que no estan en el excel base_0')
-    for _, result in resultado.iterrows():
-       if result['nombre'] not in lista_nombres_excel:
-           print(result['nombre'])
+    print(f"\nFilas del informe: {len(lista_nombres_excel)}")
+    print(f"  ✓ Con datos:      {con_datos}")
+    print(f"  ⚠ Sin datos:       {len(excel_sin_datos)}  (producto nuevo o sin ventas este período)")
+    for nombre in excel_sin_datos:
+        print(f"      - {nombre}")
+    print(f"  ⚠ Sobrantes en resultado.csv: {len(sobrantes)}  (existen en ventas/stock pero no en el Excel)")
+    for nombre in sobrantes:
+        print(f"      - {nombre}")
             
 
 if __name__ == "__main__":
