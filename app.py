@@ -249,7 +249,8 @@ def merge():
 
         ### sumar aritos
         aritos = resultado.loc[resultado[['familia_ventas', 'familia_stock']].eq('ARITOS').any(axis=1), 'nombre'].to_list()
-        aritos.remove('ARITOS ARITO CHOCOFLAN .')
+        if 'ARITOS ARITO CHOCOFLAN .' in aritos:
+            aritos.remove('ARITOS ARITO CHOCOFLAN .')
 
         mask_aritos = resultado['nombre'].isin(aritos)
         suma = resultado.loc[mask_aritos, columnas].sum(numeric_only=True)
