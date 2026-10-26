@@ -22,6 +22,11 @@ def ventas():
     1 ==> Crea las tablas en formato .csv de ventas, sucursales y montos
     """
     try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
+    try:
 
         df = pd.read_excel('ventas_mod/Ventas_Rango_de_fechas.xls')
         pd.set_option('display.width', None)
@@ -64,6 +69,9 @@ def ventas():
         columnas_identificadoras = ['FAMILIA', 'PRODUCTO', 'VARIACION']
         ventas = ventas.groupby(columnas_identificadoras, dropna=False)[columnas_ventas].sum().reset_index()
 
+        # escribir cantidades como enteros: evita que Excel lea "7.0" como 70
+        ventas[columnas_ventas] = ventas[columnas_ventas].round().astype('Int64')
+
         ventas.columns.name = None   # <- elimina el "SUCURSAL" fantasma en el índice
         ventas[['FAMILIA', 'PRODUCTO', 'VARIACION']] = ventas[['FAMILIA', 'PRODUCTO', 'VARIACION']].replace('SIN DATO', pd.NA)
 
@@ -89,6 +97,11 @@ def merge():
     """
     2 ==> Unir las tablas ventas con stock >> resultado/resultado.csv
     """
+
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
     # script para generar el archivo resultado.csv a partir de los archivos ventas.csv y test_stock.txt
     # este debe ser nombre de las columnas del archivo stock.txt debe ser el mismo que el de las columnas del archivo ventas.csv, 
